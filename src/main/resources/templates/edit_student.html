@@ -29,17 +29,18 @@
         </div>
     </div>
 </nav>
-<br/><br/><br/>
+<br /><br />
+
 <div class="container row col-md-8 offset-md-2">
     <div class="card">
         <div class="card-header">
-            <h2 class="text-center"> Create Student</h2>
+            <h2 class="text-center"> Edit Student</h2>
         </div>
         <div class="card-body">
             <form
                     method="post"
                     role="form"
-                    th:action="@{/students}"
+                    th:action="@{/students/{studentId}(studentId=${student.id})}"
                     th:object="${student}"
             >
                 <div class="form-group mb-3">

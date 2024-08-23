@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -52,6 +53,48 @@ public class StudentController {
         }
 
         studentService.createStudent(student);
+        // Return view
         return "redirect:/students";
+    }
+
+    // Edit student request
+    @GetMapping("/students/{studentId}/edit")
+    public String editStudent(@PathVariable("studentId") Long studentId, Model model){
+        StudentDTO student = studentService.getStudentById(studentId);
+        model.addAttribute("student", student);
+        // Return view
+        return "edit_student";
+    }
+
+    // Edit student form submit request
+    @PostMapping("/students/{studentId}")
+    public String updateStudent(@PathVariable("studentId") Long studentId,
+                                @Valid @ModelAttribute("student") StudentDTO studentDTO,
+                                BindingResult result,
+                                Model model){
+        if(result.hasErrors()){
+            model.addAttribute("student", studentDTO);
+            return "edit_student";
+        }
+
+        studentDTO.setId(studentId);
+        studentService.updateStudent(studentDTO);
+        return "redirect:/students";
+    }
+
+    // Delete student request
+    @GetMapping("/students/{studentId}/delete")
+    public  String deleteStudent(@PathVariable("studentId") Long studentId){
+        studentService.deleteStudent(studentId);
+        return "redirect:/students";
+    }
+
+    // View student request
+    @GetMapping("/students/{studentId}/view")
+    public String viewStudent(@PathVariable("studentId") Long studentId,
+                              Model model){
+        StudentDTO studentDTO = studentService.getStudentById(studentId);
+        model.addAttribute("student", studentDTO);
+        return "view_student";
     }
 }
